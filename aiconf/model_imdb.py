@@ -9,8 +9,8 @@ from allennlp.training.metrics import CategoricalAccuracy
 
 import torch
 
-@Model.register("paper")
-class PaperModel(Model):
+@Model.register("imdb")
+class ImdbModel(Model):
     def __init__(self,
                  vocab: Vocabulary,
                  text_field_embedder: TextFieldEmbedder,
@@ -32,19 +32,19 @@ class PaperModel(Model):
         self.accuracy = CategoricalAccuracy()
 
     def forward(self,
-                title: Dict[str, torch.Tensor],
-                venue: Optional[torch.Tensor] = None) -> Dict[str, torch.Tensor]:
-        embedded_title = self.text_field_embedder(title)
+                review: Dict[str, torch.Tensor],
+                sentiment: Optional[torch.Tensor] = None) -> Dict[str, torch.Tensor]:
+        embedded_review = self.text_field_embedder(review)
 
-        mask = get_text_field_mask(title)
-        encoded_title = self.encoder(embedded_title, mask)
-        logits = self.linear(encoded_title)
+        mask = get_text_field_mask(review)
+        encoded_review = self.encoder(embedded_review, mask)
+        logits = self.linear(encoded_review)
 
         output = {"logits": logits}
 
-        if venue is not None:
-            output["loss"] = self.loss(logits, venue)
-            self.accuracy(logits, venue)
+        if sentiment is not None:
+            output["loss"] = self.loss(logits, sentiment)
+            self.accuracy(logits, sentiment)
 
         return output
 

@@ -1,0 +1,43 @@
+{
+    "dataset_reader": {
+      "type": "paper",
+      "token_indexers": {
+          "tokens": {
+              "type": "single_id"
+          }
+      }
+    },
+    "train_data_path": "aiconf/fixtures/tiny.csv",
+    "validation_data_path": "aiconf/fixtures/tiny.csv",
+    "model": {
+      "type": "paper",
+      "text_field_embedder": {
+        "token_embedders": {
+          "tokens": {
+            "type": "embedding",
+            "embedding_dim": 10,
+            "trainable": false
+          }
+        }
+      },
+      "encoder": {
+        "type": "boe",
+        "embedding_dim": 10
+      }
+    },
+    "iterator": {
+      "type": "bucket",
+      "sorting_keys": [["title", "num_tokens"]],
+      "batch_size": 2
+    },
+    "trainer": {
+      "num_epochs": 40,
+      "patience": 10,
+      "cuda_device": -1,
+      "grad_clipping": 5.0,
+      "validation_metric": "+accuracy",
+      "optimizer": {
+        "type": "adagrad"
+      }
+    }
+  }
