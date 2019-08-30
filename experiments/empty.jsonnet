@@ -1,0 +1,8 @@
+{
+    "dataset_reader": {???},
+    "train_data_path": ???,
+    "validation_data_path": ???,
+    "model": {???},
+    "iterator": {???},
+    "trainer": {???}
+  }

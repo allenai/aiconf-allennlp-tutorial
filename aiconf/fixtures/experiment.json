@@ -1,6 +1,6 @@
 {
     "dataset_reader": {
-      "type": "paper",
+      "type": "bbc",
       "token_indexers": {
           "tokens": {
               "type": "single_id"
@@ -10,7 +10,7 @@
     "train_data_path": "aiconf/fixtures/tiny.csv",
     "validation_data_path": "aiconf/fixtures/tiny.csv",
     "model": {
-      "type": "paper",
+      "type": "bbc",
       "text_field_embedder": {
         "token_embedders": {
           "tokens": {
@@ -27,7 +27,7 @@
     },
     "iterator": {
       "type": "bucket",
-      "sorting_keys": [["title", "num_tokens"]],
+      "sorting_keys": [["text", "num_tokens"]],
       "batch_size": 2
     },
     "trainer": {
@@ -35,7 +35,7 @@
       "patience": 10,
       "cuda_device": -1,
       "grad_clipping": 5.0,
-      "validation_metric": "+accuracy",
+      "validation_metric": "+acc1",
       "optimizer": {
         "type": "adagrad"
       }

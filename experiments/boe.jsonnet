@@ -1,16 +1,16 @@
 {
     "dataset_reader": {
-      "type": "paper",
+      "type": "bbc",
       "token_indexers": {
           "tokens": {
               "type": "single_id"
           }
       }
     },
-    "train_data_path": "train.csv",
-    "validation_data_path": "validate.csv",
+    "train_data_path": "data/bbc-train.csv",
+    "validation_data_path": "data/bbc-validate.csv",
     "model": {
-      "type": "paper",
+      "type": "bbc",
       "text_field_embedder": {
         "token_embedders": {
           "tokens": {
@@ -22,24 +22,22 @@
         }
       },
       "encoder": {
-        "type": "lstm",
-        "input_size": 100,
-        "hidden_size": 100,
-        "num_layers": 1,
-        "bidirectional": true
+        "type": "bag_of_embeddings",
+        "embedding_dim": 100,
+        "averaged": true
       }
     },
     "iterator": {
       "type": "bucket",
-      "sorting_keys": [["title", "num_tokens"]],
+      "sorting_keys": [["text", "num_tokens"]],
       "batch_size": 10
     },
     "trainer": {
-      "num_epochs": 5,
+      "num_epochs": 100,
       "patience": 10,
       "cuda_device": -1,
       "grad_clipping": 5.0,
-      "validation_metric": "+accuracy",
+      "validation_metric": "+acc1",
       "optimizer": {
         "type": "adagrad"
       }

@@ -3,7 +3,7 @@ import pathlib
 from allennlp.common.testing import AllenNlpTestCase
 from allennlp.data.token_indexers import SingleIdTokenIndexer
 
-from aiconf.reader import PaperReader
+from aiconf.reader import BBCReader
 
 FIXTURES_ROOT = pathlib.Path(__file__).parent / 'fixtures'
 
@@ -11,18 +11,22 @@ FIXTURES_ROOT = pathlib.Path(__file__).parent / 'fixtures'
 class ReaderTest(AllenNlpTestCase):
     def test_reader(self):
         token_indexers = {"tokens": SingleIdTokenIndexer()}
-        reader = PaperReader(token_indexers)
+        reader = BBCReader(token_indexers)
         instances = reader.read(str(FIXTURES_ROOT / 'tiny.csv'))
 
-        # Should get 10 instances
-        assert len(instances) == 10
+        # Should get 5 instances
+        assert len(instances) == 5
 
-        # Each should be Science or Nature
-        assert all(instance.fields["venue"].label in ["Science", "Nature"] for instance in instances)
+        # should have one of each label
+        labels = {instance.fields["category"].label for instance in instances}
+        assert labels == {"business", "sport", "entertainment", "politics", "tech"}
 
-        # First instance should be "Food Products from Plants,Nature"
-        title_field = instances[0].fields["title"]
-        venue_field = instances[0].fields["venue"]
+        # First instance should be "computer grid"
+        text_field = instances[0].fields["text"]
+        category_field = instances[0].fields["category"]
 
-        assert [token.text for token in title_field.tokens] == ["Food", "Products", "from", "Plants"]
-        assert venue_field.label == "Nature"
+        assert [token.text for token in text_field.tokens] == [
+            "Computer", "grid", "to", "help", "the", "world",
+            "Your", "computer", "can", "now", "help", "solve", "the", "worlds", "most", "difficult", "health", "and", "social", "problems"
+        ]
+        assert category_field.label == "tech"

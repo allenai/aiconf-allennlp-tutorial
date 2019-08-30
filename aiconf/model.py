@@ -9,12 +9,13 @@ from allennlp.training.metrics import CategoricalAccuracy
 
 import torch
 
-@Model.register("paper")
-class PaperModel(Model):
+@Model.register("bbc")
+class BBCModel(Model):
     def __init__(self,
                  vocab: Vocabulary,
                  text_field_embedder: TextFieldEmbedder,
                  encoder: Seq2VecEncoder,
+                 dropout: float = 0.0,
                  label_namespace: str = "labels") -> None:
         super().__init__(vocab)
         self.text_field_embedder = text_field_embedder
@@ -23,30 +24,36 @@ class PaperModel(Model):
         hidden_dim = self.encoder.get_output_dim()
         num_classes = vocab.get_vocab_size(label_namespace)
 
+        self.dropout = torch.nn.Dropout(p=dropout)
         self.linear = torch.nn.Linear(in_features=hidden_dim, out_features=num_classes)
 
         # Loss function
         self.loss = torch.nn.CrossEntropyLoss()
 
         # Track accuracy
-        self.accuracy = CategoricalAccuracy()
+        self.metrics = {
+            "acc1": CategoricalAccuracy(),
+            "acc3": CategoricalAccuracy(top_k=3)
+        }
 
     def forward(self,
-                title: Dict[str, torch.Tensor],
-                venue: Optional[torch.Tensor] = None) -> Dict[str, torch.Tensor]:
-        embedded_title = self.text_field_embedder(title)
+                text: Dict[str, torch.Tensor],
+                category: Optional[torch.Tensor] = None) -> Dict[str, torch.Tensor]:
+        embedded_text = self.text_field_embedder(text)
 
-        mask = get_text_field_mask(title)
-        encoded_title = self.encoder(embedded_title, mask)
-        logits = self.linear(encoded_title)
+        mask = get_text_field_mask(text)
+        encoded_text = self.encoder(embedded_text, mask)
+        logits = self.linear(self.dropout(encoded_text))
 
         output = {"logits": logits}
 
-        if venue is not None:
-            output["loss"] = self.loss(logits, venue)
-            self.accuracy(logits, venue)
+        if category is not None:
+            output["loss"] = self.loss(logits, category)
+            for metric in self.metrics.values():
+                metric(logits, category)
 
         return output
 
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
-        return {"accuracy": self.accuracy.get_metric(reset)}
+        return {name: metric.get_metric(reset)
+                for name, metric in self.metrics.items()}

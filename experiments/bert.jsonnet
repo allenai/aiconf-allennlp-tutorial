@@ -2,7 +2,7 @@ local model = "bert-base-cased";
 
 {
     "dataset_reader": {
-      "type": "imdb",
+      "type": "bbc",
       "tokenizer": {
           "word_splitter": "bert-basic"
       },
@@ -13,10 +13,10 @@ local model = "bert-base-cased";
           }
       }
     },
-    "train_data_path": "data/aclImdb/train/*/*.txt",
-    "validation_data_path": "data/aclImdb/test/*/*.txt",
+    "train_data_path": "data/bbc-train.csv",
+    "validation_data_path": "data/bbc-validate.csv",
     "model": {
-      "type": "imdb",
+      "type": "bbc",
       "text_field_embedder": {
         "allow_unmatched_keys": true,
         "token_embedders": {
@@ -36,15 +36,15 @@ local model = "bert-base-cased";
     },
     "iterator": {
       "type": "bucket",
-      "sorting_keys": [["review", "num_tokens"]],
+      "sorting_keys": [["text", "num_tokens"]],
       "batch_size": 10
     },
     "trainer": {
       "num_epochs": 50,
       "patience": 10,
-      "cuda_device": 0,
+      "cuda_device": -1,
       "grad_clipping": 5.0,
-      "validation_metric": "+accuracy",
+      "validation_metric": "+acc1",
       "optimizer": {
         "type": "adagrad"
       }

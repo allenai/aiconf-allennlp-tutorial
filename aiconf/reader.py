@@ -9,8 +9,8 @@ from allennlp.data.instance import Instance
 from allennlp.data.token_indexers import TokenIndexer
 from allennlp.data.tokenizers import Tokenizer, WordTokenizer
 
-@DatasetReader.register("paper")
-class PaperReader(DatasetReader):
+@DatasetReader.register("bbc")
+class BBCReader(DatasetReader):
     def __init__(self,
                  token_indexers: Dict[str, TokenIndexer],
                  tokenizer: Tokenizer = WordTokenizer()) -> None:
@@ -18,25 +18,19 @@ class PaperReader(DatasetReader):
         self.token_indexers = token_indexers
         self.tokenizer = tokenizer
 
-    def text_to_instance(self, title: str, venue: Optional[str] = None) -> Instance:
-        title_tokens = self.tokenizer.tokenize(title)
-        title_field = TextField(title_tokens, self.token_indexers)
+    def text_to_instance(self, text: str, category: Optional[str] = None) -> Instance:
+        tokens = self.tokenizer.tokenize(text)
+        text_field = TextField(tokens, self.token_indexers)
 
-        fields = {"title": title_field}
+        fields = {"text": text_field}
 
-        if venue is not None:
-            fields["venue"] = LabelField(venue)
+        if category is not None:
+            fields["category"] = LabelField(category)
 
         return Instance(fields)
 
     def _read(self, file_path: str) -> Iterable[Instance]:
-        # handle both gzipped and non-gzipped files
-        my_open = gzip.open if file_path.endswith(".gz") else open
-
-        # if `file_path` is a URL, redirect to the cache
-        file_path = cached_path(file_path)
-
-        with my_open(file_path, 'rt') as f:
+        with open(file_path, 'rt') as f:
             reader = csv.reader(f)
-            for title, venue in reader:
-                yield self.text_to_instance(title, venue)
+            for category, text in reader:
+                yield self.text_to_instance(text, category)

@@ -8,8 +8,8 @@ from allennlp.modules.text_field_embedders import BasicTextFieldEmbedder
 from allennlp.modules.token_embedders import Embedding
 from allennlp.modules.seq2vec_encoders import BagOfEmbeddingsEncoder
 
-from aiconf.reader import PaperReader
-from aiconf.model import PaperModel
+from aiconf.reader import BBCReader
+from aiconf.model import BBCModel
 
 FIXTURES_ROOT = pathlib.Path(__file__).parent / 'fixtures'
 
