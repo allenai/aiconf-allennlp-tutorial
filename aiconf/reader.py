@@ -19,18 +19,20 @@ class BBCReader(DatasetReader):
         self.tokenizer = tokenizer
 
     def text_to_instance(self, text: str, category: Optional[str] = None) -> Instance:
-        tokens = self.tokenizer.tokenize(text)
-        text_field = TextField(tokens, self.token_indexers)
-
-        fields = {"text": text_field}
-
-        if category is not None:
-            fields["category"] = LabelField(category)
-
-        return Instance(fields)
+        """
+        1. tokenize text
+        2. create a TextField for the text
+        3. create a LabelField for the category (if provided)
+        4. return an Instance
+        """
+        return Instance(fields={})
 
     def _read(self, file_path: str) -> Iterable[Instance]:
-        with open(file_path, 'rt') as f:
-            reader = csv.reader(f)
-            for category, text in reader:
-                yield self.text_to_instance(text, category)
+        """
+        Here our data is a csv with rows [category, text], so we want to
+
+        1. read the csv file
+        2. pass the fields to text_to_instance
+        3. yield the instances
+        """
+        pass

@@ -14,19 +14,7 @@ class ReaderTest(AllenNlpTestCase):
         reader = BBCReader(token_indexers)
         instances = reader.read(str(FIXTURES_ROOT / 'tiny.csv'))
 
-        # Should get 5 instances
-        assert len(instances) == 5
-
-        # should have one of each label
-        labels = {instance.fields["category"].label for instance in instances}
-        assert labels == {"business", "sport", "entertainment", "politics", "tech"}
-
-        # First instance should be "computer grid"
-        text_field = instances[0].fields["text"]
-        category_field = instances[0].fields["category"]
-
-        assert [token.text for token in text_field.tokens] == [
-            "Computer", "grid", "to", "help", "the", "world",
-            "Your", "computer", "can", "now", "help", "solve", "the", "worlds", "most", "difficult", "health", "and", "social", "problems"
-        ]
-        assert category_field.label == "tech"
+        # Some ideas of things to test:
+        # * test that there are 5 instances
+        # * test that there's one of each label
+        # * test that the first instance has the right values in its fields

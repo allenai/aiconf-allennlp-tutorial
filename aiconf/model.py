@@ -15,7 +15,6 @@ class BBCModel(Model):
                  vocab: Vocabulary,
                  text_field_embedder: TextFieldEmbedder,
                  encoder: Seq2VecEncoder,
-                 dropout: float = 0.0,
                  label_namespace: str = "labels") -> None:
         super().__init__(vocab)
         self.text_field_embedder = text_field_embedder
