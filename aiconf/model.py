@@ -15,14 +15,13 @@ class BBCModel(Model):
                  vocab: Vocabulary,
                  text_field_embedder: TextFieldEmbedder,
                  encoder: Seq2VecEncoder,
-                 dropout: float = 0.0,
-                 label_namespace: str = "labels") -> None:
+                 dropout: float = 0.0) -> None:
         super().__init__(vocab)
         self.text_field_embedder = text_field_embedder
         self.encoder = encoder
 
         hidden_dim = self.encoder.get_output_dim()
-        num_classes = vocab.get_vocab_size(label_namespace)
+        num_classes = vocab.get_vocab_size("labels")
 
         self.dropout = torch.nn.Dropout(p=dropout)
         self.linear = torch.nn.Linear(in_features=hidden_dim, out_features=num_classes)
