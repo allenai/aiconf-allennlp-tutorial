@@ -45,7 +45,10 @@ class BBCModel(Model):
         encoded_text = self.encoder(embedded_text, mask)
         logits = self.linear(self.dropout(encoded_text))
 
-        output = {"logits": logits}
+        num_categories = self.vocab.get_vocab_size("labels")
+        category_names = [[self.vocab.get_token_from_index(i, namespace="labels") for i in range(num_categories)]]
+
+        output = {"logits": logits, "category_names": category_names}
 
         if category is not None:
             output["loss"] = self.loss(logits, category)
