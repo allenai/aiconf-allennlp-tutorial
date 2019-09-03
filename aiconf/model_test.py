@@ -17,14 +17,14 @@ FIXTURES_ROOT = pathlib.Path(__file__).parent / 'fixtures'
 class PaperModelTest(ModelTestCase):
     def setUp(self):
         super().setUp()
-        self.set_up_model(FIXTURES_ROOT / 'experiment.json', FIXTURES_ROOT / 'tiny.csv')
+
+        # 1. call self.set_up_model with the path to the experiment config
+        #    and the path to the test fixture
 
     def test_simple_tagger_can_train_save_and_load(self):
-        self.ensure_model_can_train_save_and_load(self.param_file)
+        # self.ensure_model_can_train_save_and_load(self.param_file)
+        pass
 
-    # def test_forward_pass_runs_correctly(self):
-    #     training_tensors = self.dataset.as_tensor_dict()
-    #     output_dict = self.model(**training_tensors)
-    #     output_dict = self.model.decode(output_dict)
-    #     class_probs = output_dict['class_probabilities'][0].data.numpy()
-    #     numpy.testing.assert_almost_equal(numpy.sum(class_probs, -1), numpy.array([1, 1, 1, 1]))
+    def test_forward_pass_runs_correctly(self):
+        # feel free to add extra tests here
+        pass

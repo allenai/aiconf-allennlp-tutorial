@@ -21,7 +21,7 @@
     "iterator": {
       "type": "bucket",
       "sorting_keys": [["text", "num_tokens"]],
-      "batch_size": 2
+      "batch_size": 10
     },
     "trainer": {
       "num_epochs": ???,

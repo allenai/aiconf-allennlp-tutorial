@@ -12,8 +12,7 @@ import torch
 @Model.register("bbc")
 class BBCModel(Model):
     def __init__(self,
-                 vocab: Vocabulary,
-                 ...) -> None:
+                 vocab: Vocabulary) -> None:
         super().__init__(vocab)
 
         # 1. We want the constructor to accept a TextFieldEmbedder
@@ -37,7 +36,7 @@ class BBCModel(Model):
         # store them in a dictionary so that `self.get_metrics` works correctly.
 
 
-    def forward(self, ...) -> Dict[str, torch.Tensor]:
+    def forward(self) -> Dict[str, torch.Tensor]:
         # Our forward function needs to take arguments that correspond
         # to the fields of our instance.
 

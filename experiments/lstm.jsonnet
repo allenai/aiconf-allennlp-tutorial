@@ -27,8 +27,8 @@
         "hidden_size": 25,
         "num_layers": 1,
         "bidirectional": true
-      },
-      "dropout": 0.8
+      }
+      //"dropout": 0.8
     },
     "iterator": {
       "type": "bucket",

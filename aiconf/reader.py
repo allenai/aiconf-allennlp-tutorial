@@ -35,4 +35,4 @@ class BBCReader(DatasetReader):
         2. pass the fields to text_to_instance
         3. yield the instances
         """
-        pass
+        yield Instance({})
