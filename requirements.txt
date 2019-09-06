@@ -1,3 +1,4 @@
 allennlp
 pytest
 ipython
+jupyter
