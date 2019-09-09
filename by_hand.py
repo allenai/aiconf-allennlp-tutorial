@@ -119,7 +119,7 @@ for epoch in range(NUM_EPOCHS):
             # TODO: update num_seen and num_correct
             # TODO: compute accuracy
             # TODO: add accuracy to the tqdm description
-            pass
+            it.set_description(f"")
 
     # Compute validation accuracy
 
