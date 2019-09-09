@@ -1,4 +1,4 @@
-local model = "bert-base-cased";
+local model = "bert-base-uncased";
 
 {
     "dataset_reader": {
