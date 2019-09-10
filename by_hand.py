@@ -148,7 +148,7 @@ for epoch in range(NUM_EPOCHS):
             # TODO: compute accuracy
             accuracy = num_correct / num_seen
             # TODO: add accuracy to the tqdm description
-            it.set_description(f"acc: {accuracy:.3f}")
+            it.set_description(f"train acc: {accuracy:.3f} loss: {epoch_loss / num_seen:.3f}")
 
     # Compute validation accuracy
 
@@ -159,17 +159,23 @@ for epoch in range(NUM_EPOCHS):
     num_correct = 0
     num_seen = 0
 
-    for label, text in tqdm.tqdm(validation_data):
-        # TODO: call the model on the inputs
-        output = model(text, label)
+    with tqdm.tqdm(validation_data) as it:
+        validation_loss = 0.0
+        for label, text in it:
+            # TODO: call the model on the inputs
+            output = model(text, label)
 
-        # TODO: compute the actual label_id and the predicted label_id
-        label_id = label_to_idx[label]
-        predicted = torch.argmax(output["logits"]).item()
+            # TODO: compute the actual label_id and the predicted label_id
+            label_id = label_to_idx[label]
+            predicted = torch.argmax(output["logits"]).item()
 
-        # TODO: increment counters
-        num_seen += 1
-        num_correct += (predicted == label_id)
+            validation_loss += output["loss"].item()
+
+            # TODO: increment counters
+            num_seen += 1
+            num_correct += (predicted == label_id)
+            accuracy = num_correct / num_seen
+            it.set_description(f"valid acc: {accuracy:.3f} loss: {validation_loss / num_seen:.3f}")
 
     # print epoch, epoch loss, accuracy
     print(epoch, epoch_loss, num_correct / num_seen)
