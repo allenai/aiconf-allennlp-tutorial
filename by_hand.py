@@ -94,6 +94,7 @@ optimizer = torch.optim.Adagrad(model.parameters())
 
 
 for epoch in range(NUM_EPOCHS):
+    print(f"epoch {epoch}")
     # shuffle the training data
     random.shuffle(training_data)
 
@@ -118,7 +119,7 @@ for epoch in range(NUM_EPOCHS):
 
             # TODO: update num_seen and num_correct
             # TODO: compute accuracy
-            # TODO: add accuracy to the tqdm description
+            # TODO: add accuracy and loss to the tqdm description
             it.set_description(f"")
 
     # Compute validation accuracy
@@ -129,14 +130,16 @@ for epoch in range(NUM_EPOCHS):
     num_correct = 0
     num_seen = 0
 
-    for label, text in tqdm.tqdm(validation_data):
-        # TODO: call the model on the inputs
+    with tqdm.tqdm(validation_data) as it:
+        for label, text in it:
+            # TODO: call the model on the inputs
 
-        # TODO: compute the actual label_id and the predicted label_id
+            # TODO: compute the actual label_id and the predicted label_id
 
-        # TODO: increment counters
+            # TODO: increment counters
 
-    # print epoch, epoch loss, accuracy
-    print(epoch, epoch_loss, num_correct / num_seen)
+            # TODO: add accuracy and loss to the tqdm description
+            it.set_description(f"")
+
 
 # TODO: evaluate accuracy on test dataset
