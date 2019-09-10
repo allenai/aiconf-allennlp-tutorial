@@ -129,6 +129,7 @@ for epoch in range(NUM_EPOCHS):
     # set num_correct and num_seen to 0
     num_correct = 0
     num_seen = 0
+    validation_loss = 0.0
 
     with tqdm.tqdm(validation_data) as it:
         for label, text in it:
